@@ -279,7 +279,7 @@ def set_execution_target(backend_id='qasm_simulator',
                     job_failure_policy=SessionJobFailurePolicy.CONTINUE)
                     
             backend.latest_session = session
-            
+
     # handle QASM simulator specially
     elif backend_id == 'qasm_simulator':
         backend = Aer.get_backend("qasm_simulator") 
@@ -287,6 +287,7 @@ def set_execution_target(backend_id='qasm_simulator',
     # handle Statevector simulator specially
     elif backend_id == 'statevector_simulator':
         backend = Aer.get_backend("statevector_simulator")
+        backend.set_options(device="GPU")
         
     # handle 'fake' backends here
     elif 'fake' in backend_id:

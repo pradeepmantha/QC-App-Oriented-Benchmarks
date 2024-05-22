@@ -1078,7 +1078,7 @@ def run(
     show_elapsed_times=True,
     use_logscale_for_times=False,
     save_res_to_file=True, save_final_counts=False, detailed_save_names=False,
-    backend_id="qasm_simulator",
+    backend_id="statevector_simulator",
     provider_backend=None, hub="ibm-q", group="open", project="main",
     exec_options=None,
     context=None,
