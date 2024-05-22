@@ -17,6 +17,7 @@ from scipy.optimize import minimize
 
 from qiskit import QuantumCircuit
 from qiskit_aer import Aer
+from qiskit_aer.primitives import Estimator as AirEstimator
 
 from qiskit.circuit import ParameterVector
 from qiskit.quantum_info import SparsePauliOp
@@ -1056,7 +1057,7 @@ def run(
     radius=None,
     thetas_array=None,
     parameterized=False, parameter_mode=1,
-    use_estimator=False,
+    use_estimator=True,
     do_fidelities=True,
     minimizer_function=None,
     minimizer_tolerance=1e-3, max_iter=30, comfort=False,
@@ -1808,11 +1809,15 @@ def submit_to_estimator(qc=None, num_qubits=1, unique_id=-1, parameterized=False
     else:
         qc_bound = qc
 
-    if backend_id.lower() == "statevector_simulator":
-        estimator = Estimator()  # statevector doesn't work w/ vanilla BackendEstimator
-    else:
-        estimator = BackendEstimator(backend=Aer.get_backend(backend_id))  # FIXME: won't work for vendor QPUs
-        #estimator = BackendEstimator(backend=provider_backend)
+    options = {"method": "statevector", "device": 'GPU', "cuStateVec_enable": True, "shots": 1000}
+    print(options)
+    estimator = AirEstimator(backend_options=options)
+        
+    # if backend_id.lower() == "statevector_simulator":
+    #     estimator = Estimator()  # statevector doesn't work w/ vanilla BackendEstimator
+    # else:
+    #     estimator = BackendEstimator(backend=Aer.get_backend(backend_id))  # FIXME: won't work for vendor QPUs
+    #     #estimator = BackendEstimator(backend=provider_backend)
     
     ts_start = time.time()
     
